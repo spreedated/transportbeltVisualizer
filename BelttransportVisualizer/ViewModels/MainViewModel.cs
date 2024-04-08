@@ -5,8 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WinFormsApp1.Logic;
-using WinFormsApp1.Models;
+using TransportbeltRender;
+using TransportbeltRender.Models;
 
 namespace WinFormsApp1.ViewModels
 {

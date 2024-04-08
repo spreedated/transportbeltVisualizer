@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WinFormsApp1.Models
+namespace TransportbeltRender.Models
 {
     public record TransportImageRenderElements
     {

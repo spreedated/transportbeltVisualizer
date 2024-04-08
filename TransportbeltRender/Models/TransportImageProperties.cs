@@ -1,6 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 
-namespace WinFormsApp1.Models
+namespace TransportbeltRender.Models
 {
     public record TransportImageProperties
     {

@@ -1,31 +1,12 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
-using System.IO;
 using System.Threading.Tasks;
 
-namespace WinFormsApp1.Logic
+namespace TransportbeltRender
 {
     public static class Extensions
     {
-        public static async Task<System.Drawing.Image> SaveAsWinFormsImage(this TransportImage ti)
-        {
-            if (ti.renderResult == null)
-            {
-                return null;
-            }
-
-            System.Drawing.Image result = null;
-
-            using (MemoryStream ms = new())
-            {
-                await ti.renderResult.SaveAsync(ms, new PngEncoder());
-                result = System.Drawing.Image.FromStream(ms);
-            }
-
-            return result;
-        }
-
         public static async Task SaveToFile(this TransportImage ti, string path)
         {
             if (string.IsNullOrEmpty(path))

@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
-using WinFormsApp1.Models;
+using TransportbeltRender.Models;
 
-namespace WinFormsApp1.Logic
+namespace TransportbeltRender
 {
     public class TransportImage : IDisposable
     {

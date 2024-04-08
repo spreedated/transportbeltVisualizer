@@ -11,6 +11,8 @@
     <NoWarn>1701;1702;IDE0290</NoWarn>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en</NeutralLanguage>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>sampleapp.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,8 +23,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.3" />
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TransportbeltRender.WinForms\TransportbeltRender.WinForms.csproj" />
+    <ProjectReference Include="..\TransportbeltRender\TransportbeltRender.csproj" />
   </ItemGroup>
 
 </Project>
