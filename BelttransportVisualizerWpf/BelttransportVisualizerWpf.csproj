@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Title>Just a belttransport app</Title>
+    <AssemblyTitle>Just a belttransport app</AssemblyTitle>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <NoWarn>1701;1702;IDE0290</NoWarn>
+    <LangVersion>latest</LangVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>sampleappwpf.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TransportbeltRender.Wpf\TransportbeltRender.Wpf.csproj" />
+    <ProjectReference Include="..\TransportbeltRender\TransportbeltRender.csproj" />
+  </ItemGroup>
+
+</Project>

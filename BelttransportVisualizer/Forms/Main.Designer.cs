@@ -453,7 +453,7 @@ namespace WinFormsApp1
             this.Name = "Main";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Tag = "";
-            this.Text = "Hessen Mousa";
+            this.Text = "MyTransportBelt App";
             ((System.ComponentModel.ISupportInitialize)this.PBX_RenderImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)this.NUD_BandSegments).EndInit();
             ((System.ComponentModel.ISupportInitialize)this.NUD_ScannerPosition).EndInit();

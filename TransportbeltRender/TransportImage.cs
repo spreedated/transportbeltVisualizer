@@ -24,10 +24,22 @@ namespace TransportbeltRender
         #region Constructor
         public TransportImage(int imageWidth, int imageHeight, TransportImageProperties properties, TransportImageRenderElements elements)
         {
+            if (imageWidth == default || imageWidth <= -1)
+            {
+                throw new ArgumentException("Width cannot be null or less", nameof(imageWidth));
+            }
+
+            if (imageHeight == default || imageHeight <= -1)
+            {
+                throw new ArgumentException("Height cannot be null or less", nameof(imageHeight));
+            }
+
             this.ImageWidth = imageWidth;
             this.ImageHeight = imageHeight;
             this.Properties = properties;
+            this.Properties ??= new();
             this.Elements = elements;
+            this.Elements ??= new();
         }
         #endregion
 

@@ -1,0 +1,155 @@
+﻿<Window x:Class="BelttransportVisualizerWpf.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BelttransportVisualizerWpf.ViewModels"
+        xmlns:local="clr-namespace:BelttransportVisualizerWpf"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        Height="555"
+        MinHeight="555"
+        Width="1090"
+        MinWidth="1090"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource MaterialDesignWindow}">
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="160"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <GroupBox Header="Band properties">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8" HorizontalAlignment="Right">
+                        <TextBlock Text="Bandsegments:" />
+                        <xctk:IntegerUpDown Value="{Binding Elements.TransportBandSegments}" Minimum="4" Maximum="40" Margin="8,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBlock Text="Scanner position:" Margin="0,0,8,0" />
+                        <xctk:IntegerUpDown Minimum="-1" Maximum="39" Value="{Binding Elements.ScannerPosition}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Crates on segments" Margin="12,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <xctk:IntegerUpDown Minimum="0" Value="{Binding SelectedCrateToAddOnSegment}" />
+                        <Button Content="Add" Command="{Binding AddCrateCommand}" Margin="0,8,0,0"/>
+                        <Button Content="Rem" Command="{Binding RemCrateCommand}" Margin="0,8,0,0"/>
+                    </StackPanel>
+
+                    <Grid Grid.Column="1" Margin="8,0,0,0">
+                        <ListBox ItemsSource="{Binding CratesOnSegments}" SelectedItem="{Binding SelectedCrateOnSegment}"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Crates on pallets" Margin="12,0,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,8">
+                                <TextBlock Text="Position:" />
+                                <xctk:IntegerUpDown Minimum="0" Value="{Binding SelectedPositionToAddPallet}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Crate count:" />
+                                <xctk:IntegerUpDown Minimum="0" Value="{Binding SelectedCrateToAddPallet}" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Grid VerticalAlignment="Bottom" Height="32">
+                            <Button Content="Add" Command="{Binding AddPalletCommand}" HorizontalAlignment="Left"/>
+                            <Button Content="Rem" Command="{Binding RemPalletCommand}" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Grid.Column="1" Margin="8,0,0,0">
+                        <ListBox MinHeight="80" MinWidth="80" ItemsSource="{Binding CratesOnPallets}" SelectedItem="{Binding SelectedCrateOnPallet}"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <GroupBox Header="Image options" Width="320" Margin="0,0,12,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition Height="24"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <CheckBox Grid.Row="0" Content="Draw background" IsChecked="{Binding Properties.DrawBackground}" />
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="Band Y location offset:" Margin="0,0,8,0"/>
+                        <xctk:IntegerUpDown Value="{Binding Properties.BandYLocation}"/>
+                    </StackPanel>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Crate color:" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <xctk:ColorPicker Width="24" Height="24" DisplayColorAndName="False" ShowDropDownButton="False" SelectedColor="{Binding ImageCrateColor}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Scanner color:" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <xctk:ColorPicker Width="24" Height="24" DisplayColorAndName="False" ShowDropDownButton="False" SelectedColor="{Binding ImageScannerColor}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBlock Text="Pallet color:" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <xctk:ColorPicker Width="24" Height="24" DisplayColorAndName="False" ShowDropDownButton="False" SelectedColor="{Binding ImagePalletColor}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Backgr. color:" Margin="0,0,8,0" VerticalAlignment="Center" />
+                            <xctk:ColorPicker Width="24" Height="24" DisplayColorAndName="False" ShowDropDownButton="False" SelectedColor="{Binding ImageBackgroundColor}" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+            
+            <StackPanel HorizontalAlignment="Right" Margin="8">
+                <Button Content="Render" Margin="0,0,0,8" Command="{Binding RenderCommand}" />
+                <Button Content="Save image" Command="{Binding SaveCommand}" />
+            </StackPanel>
+        </StackPanel>
+
+        <GroupBox Grid.Row="1" Header="Rendered Image" Margin="0,8,0,0">
+            <Grid x:Name="UiRenderImageGrid">
+                <Image Source="{Binding RenderedImage}"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

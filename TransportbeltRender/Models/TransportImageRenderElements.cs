@@ -4,9 +4,9 @@ namespace TransportbeltRender.Models
 {
     public record TransportImageRenderElements
     {
-        public int TransportBandSegments { get; set; }
-        public int ScannerPosition { get; set; }
-        public int[] CrateOnSegments { get; set; }
-        public Dictionary<int, int> CratesOnPallets { get; set; }
+        public int TransportBandSegments { get; set; } = 10;
+        public int ScannerPosition { get; set; } = -1;
+        public int[] CrateOnSegments { get; set; } = [];
+        public Dictionary<int, int> CratesOnPallets { get; set; } = [];
     }
 }
