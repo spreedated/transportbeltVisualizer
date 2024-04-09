@@ -22,7 +22,7 @@ namespace TransportbeltRender
         public TransportImageRenderElements Elements { get; init; }
 
         #region Constructor
-        public TransportImage(int imageWidth, int imageHeight, TransportImageProperties properties, TransportImageRenderElements elements)
+        public TransportImage(int imageWidth, int imageHeight, TransportImageProperties properties = null, TransportImageRenderElements elements = null)
         {
             if (imageWidth == default || imageWidth <= -1)
             {
