@@ -1,20 +1,21 @@
-﻿using BelttransportVisualizerWpf.Views;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
+using BelttransportVisualizerAvalonia.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
 using TransportbeltRender;
 using TransportbeltRender.Models;
 
-namespace BelttransportVisualizerWpf.ViewModels
+namespace BelttransportVisualizerAvalonia.ViewModels
 {
-    internal partial class MainWindowViewModel : ObservableObject
+    public partial class MainWindowViewModel : ObservableObject
     {
         private readonly Assembly assembly;
 
@@ -34,64 +35,8 @@ namespace BelttransportVisualizerWpf.ViewModels
         [ObservableProperty]
         private string title;
 
-        public Color ImageBackgroundColor
-        {
-            get
-            {
-                return this.Properties.BackgroundColor.ToWpfColor();
-            }
-
-            set
-            {
-                this.Properties.BackgroundColor = value.ToImageSharpColor();
-                base.OnPropertyChanged(nameof(this.ImageBackgroundColor));
-            }
-        }
-
-        public Color ImageScannerColor
-        {
-            get
-            {
-                return this.Properties.ScannerColor.ToWpfColor();
-            }
-
-            set
-            {
-                this.Properties.ScannerColor = value.ToImageSharpColor();
-                base.OnPropertyChanged(nameof(this.ImageScannerColor));
-            }
-        }
-
-        public Color ImageCrateColor
-        {
-            get
-            {
-                return this.Properties.CrateColor.ToWpfColor();
-            }
-
-            set
-            {
-                this.Properties.CrateColor = value.ToImageSharpColor();
-                base.OnPropertyChanged(nameof(this.ImageCrateColor));
-            }
-        }
-
-        public Color ImagePalletColor
-        {
-            get
-            {
-                return this.Properties.PalletColor.ToWpfColor();
-            }
-
-            set
-            {
-                this.Properties.PalletColor = value.ToImageSharpColor();
-                base.OnPropertyChanged(nameof(this.ImagePalletColor));
-            }
-        }
-
         [ObservableProperty]
-        private ImageSource renderedImage;
+        private Bitmap renderedImage;
 
         [ObservableProperty]
         private float renderBoxWidth;
@@ -120,6 +65,62 @@ namespace BelttransportVisualizerWpf.ViewModels
         [ObservableProperty]
         private int selectedCrateToAddPallet;
 
+        public Color ImageBackgroundColor
+        {
+            get
+            {
+                return this.Properties.BackgroundColor.ToAvaloniaColor();
+            }
+
+            set
+            {
+                this.Properties.BackgroundColor = value.ToImageSharpColor();
+                base.OnPropertyChanged(nameof(this.ImageBackgroundColor));
+            }
+        }
+
+        public Color ImageScannerColor
+        {
+            get
+            {
+                return this.Properties.ScannerColor.ToAvaloniaColor();
+            }
+
+            set
+            {
+                this.Properties.ScannerColor = value.ToImageSharpColor();
+                base.OnPropertyChanged(nameof(this.ImageScannerColor));
+            }
+        }
+
+        public Color ImageCrateColor
+        {
+            get
+            {
+                return this.Properties.CrateColor.ToAvaloniaColor();
+            }
+
+            set
+            {
+                this.Properties.CrateColor = value.ToImageSharpColor();
+                base.OnPropertyChanged(nameof(this.ImageCrateColor));
+            }
+        }
+
+        public Color ImagePalletColor
+        {
+            get
+            {
+                return this.Properties.PalletColor.ToAvaloniaColor();
+            }
+
+            set
+            {
+                this.Properties.PalletColor = value.ToImageSharpColor();
+                base.OnPropertyChanged(nameof(this.ImagePalletColor));
+            }
+        }
+
         #region Constructor
         public MainWindowViewModel()
         {
@@ -142,21 +143,18 @@ namespace BelttransportVisualizerWpf.ViewModels
         [RelayCommand(CanExecute = nameof(CanExecuteSave))]
         private async Task Save()
         {
-            SaveFileDialog sfd = new()
+            var result = await this.Instance.StorageProvider.SaveFilePickerAsync(new()
             {
-                Filter = "PNG Image|*.png",
                 Title = "Save Image",
-                FileName = $"TransportImage_{DateTime.Now:yyyyMMddHHmmss}.png",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            };
+                FileTypeChoices = [FilePickerFileTypes.ImagePng],
+                SuggestedFileName = $"TransportImage_{DateTime.Now:yyyyMMddHHmmss}.png",
+                ShowOverwritePrompt = true,
+                SuggestedStartLocation = await this.Instance.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop)
+            });
 
-            bool? result = sfd.ShowDialog();
-
-            if (result != null && (bool)result)
+            if (result != null && !string.IsNullOrEmpty(result.Path.AbsolutePath))
             {
-                //this.Instance.Dispatcher.Invoke(() => caller.IsEnabled = false);
-                await this.TransportImage.SaveToFile(sfd.FileName);
-                //this.Instance.Dispatcher.Invoke(() => caller.IsEnabled = true);
+                await this.TransportImage.SaveToFile(result.Path.AbsolutePath);
             }
         }
 
@@ -168,18 +166,13 @@ namespace BelttransportVisualizerWpf.ViewModels
         [RelayCommand]
         private async Task Render()
         {
-            //caller.IsEnabled = false;
-
             this.Elements.CrateOnSegments = [.. this.CratesOnSegments];
             this.Elements.CratesOnPallets = new(this.CratesOnPallets.Select(x => new System.Collections.Generic.KeyValuePair<int, int>(int.Parse(x.Split(',')[0]), int.Parse(x.Split(',')[1]))));
 
-            this.TransportImage = new((int)((MainWindow)this.Instance).UiRenderImageGrid.ActualWidth, (int)((MainWindow)this.Instance).UiRenderImageGrid.ActualHeight, this.Properties, this.Elements);
+            this.TransportImage = new((int)((MainWindow)this.Instance).UiRenderImageGrid.Bounds.Width, (int)((MainWindow)this.Instance).UiRenderImageGrid.Bounds.Height, this.Properties, this.Elements);
 
             await this.TransportImage.Render();
-            this.RenderedImage = await this.TransportImage.SaveAsWpfImage();
-
-            //caller.Enabled = true;
-            //this.BtnSaveImage.Enabled = true;
+            this.RenderedImage = await this.TransportImage.SaveAsAvaloniaImage();
         }
 
         [RelayCommand]
@@ -195,7 +188,15 @@ namespace BelttransportVisualizerWpf.ViewModels
         [RelayCommand]
         private void RemCrate()
         {
-            this.CratesOnSegments.Remove(this.SelectedCrateOnSegment);
+            try
+            {
+                this.CratesOnSegments.Remove(this.SelectedCrateOnSegment);
+            }
+            catch (Exception)
+            {
+                //noop
+            }
+
             this.SelectedCrateOnSegment = default;
         }
 
